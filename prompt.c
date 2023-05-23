@@ -9,9 +9,9 @@ void prompt(char **av, char **env)
 {
 	char *s = NULL;
 	size_t n = 0;
-	int i = 0, status;
+	int i = 0, status, j;
 	ssize_t n_char;
-	char *argv[] = {NULL, NULL};
+	char *argv[maxcmd];
 	pid_t c_pid;
 
 	for (;;)
@@ -29,7 +29,10 @@ void prompt(char **av, char **env)
 			if (s[i] == '\n')
 				s[i] = 0;
 		}
-		argv[0] = s;
+		j = 0;
+		argv[j] = strtok(s, " ");
+		while (argv[j])
+			argv[++j] = strtok(NULL, " ");
 		c_pid = fork();
 		if (c_pid == -1)
 		{
