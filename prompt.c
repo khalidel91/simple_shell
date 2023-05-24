@@ -9,7 +9,7 @@ int prompt(char **av, char **env)
 {
 	char *s = NULL;
 	size_t n = 0;
-	int i = 0, status = 0, j;
+	int i = 0, status, j;
 	ssize_t n_char;
 	char *argv[maxcmd];
 	pid_t c_pid;
@@ -45,6 +45,7 @@ int prompt(char **av, char **env)
 				printf("%s: No such file or directory\n", av[0]);
 		}
 		else
-			return (status);
+			wait(&status);
 	}
+return (0);
 }
