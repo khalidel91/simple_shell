@@ -5,7 +5,7 @@
  * @env: environment variables
  *
  */
-int prompt(char **av, char **env)
+void prompt(char **av, char **env)
 {
 	char *s = NULL;
 	size_t n = 0;
@@ -43,9 +43,9 @@ int prompt(char **av, char **env)
 		{
 			if (execve(argv[0], argv, env) == -1)
 				printf("%s: No such file or directory\n", av[0]);
+			exit(EXIT_FAILURE);
 		}
 		else
 			wait(&status);
 	}
-return (0);
 }

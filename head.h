@@ -7,6 +7,6 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #define maxcmd 10
-int prompt(char **av, char **env);
+void prompt(char **av, char **env);
 
 #endif
