@@ -179,7 +179,8 @@ void func_loop(void)
   char **args;
   int status;
 
-  do {
+ while (status)
+  {
     printf("cisfun> ");
     line = func_read_line();
     args = func_split_line(line);
@@ -187,7 +188,7 @@ void func_loop(void)
 
     free(line);
     free(args);
-  } while (status);
+  } 
 }
 
 /**
@@ -202,5 +203,5 @@ int main(int argc, char **argv)
   (void) argv;
 
   func_loop();
-  return (0);
+  return EXIT_SUCCESS;
 }
