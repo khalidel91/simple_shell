@@ -46,5 +46,6 @@ void prompt(char **av, char **env)
 		}
 		else
 			wait(&status);
+		status = 0;
 	}
 }
