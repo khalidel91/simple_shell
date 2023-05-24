@@ -42,8 +42,11 @@ void prompt(char **av, char **env)
 		if (c_pid == 0)
 		{
 			if (execve(argv[0], argv, env) == -1)
+			{
 				printf("%s: No such file or directory\n", av[0]);
+			perror("execve");
 			exit(EXIT_FAILURE);
+			}
 		}
 		else
 			wait(&status);
