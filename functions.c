@@ -185,3 +185,24 @@ char **func_split_line (char *line)
 	tokens[position] = NULL;
 	return (tokens);
 }
+/**
+ * func_loop - loop function
+ *
+ */
+void
+func_loop (void) 
+{
+char *line;
+char **args;
+int status;
+  
+  do
+    {
+printf ("cisfun> ");
+line = func_read_line ();
+args = func_split_line (line);
+status = func_execute (args);
+free (args);
+}
+  while (status);
+}
