@@ -131,4 +131,78 @@ char *func_read_line(void)
         exit(EXIT_FAILURE);
       }
     }
+  
   }
+  #endif
+}
+#define func_TOK_BUFSIZE 64
+#define func_TOK_DELIM " \t\r\n\a"
+/**
+   @brief Split a line into tokens (very naively).
+   @param line The line.
+   @return Null-terminated array of tokens.
+ */
+char **func_split_line(char *line)
+{
+  int bufsize = func_TOK_BUFSIZE, position = 0;
+  char **tokens = malloc(bufsize * sizeof(char*));
+  char *token, **tokens_backup;
+
+  if (!tokens) {
+    fprintf(stderr, "func: allocation error\n");
+    exit(EXIT_FAILURE);
+  }
+
+  token = strtok(line, func_TOK_DELIM);
+  while (token != NULL) {
+    tokens[position] = token;
+    position++;
+
+    if (position >= bufsize) {
+      bufsize += func_TOK_BUFSIZE;
+      tokens_backup = tokens;
+      tokens = realloc(tokens, bufsize * sizeof(char*));
+      if (!tokens) {
+                free(tokens_backup);
+        fprintf(stderr, "func: allocation error\n");
+        exit(EXIT_FAILURE);
+      }
+    }
+
+    token = strtok(NULL, func_TOK_DELIM);
+  }
+  tokens[position] = NULL;
+  return tokens;
+}
+void func_loop(void)
+{
+  char *line;
+  char **args;
+  int status;
+
+  do {
+    printf("cisfun> ");
+    line = func_read_line();
+    args = func_split_line(line);
+    status = func_execute(args);
+
+    free(line);
+    free(args);
+  } while (status);
+}
+
+/**
+   @brief Main entry point.
+   @param argc Argument count.
+   @param argv Argument vector.
+   @return status code
+ */
+int main(int argc, char **argv)
+{
+  (void) argc;
+  (void) argv;
+
+  func_loop();
+  return EXIT_SUCCESS;
+}
+
