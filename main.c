@@ -23,11 +23,23 @@ int (*builtin_func[]) (char **) = {
 	&func_exit
 };
 
+/**
+ * func_num_builtins - num builtins function
+ *
+ *
+ * Return: integer
+ */
 int func_num_builtins(void)
 {
 	return (sizeof(builtin_str) / sizeof(char *));
 }
 
+/**
+ * func_cd - change directory function
+ *
+ * @args: arguments
+ * Return: always 1
+ */
 int func_cd(char **args)
 {
 	if (args[1] == NULL)
@@ -40,6 +52,12 @@ int func_cd(char **args)
 	return (1);
 }
 
+/**
+ * func_help - help function
+ * @args: arguments
+ *
+ * Return: always 1
+ */
 int func_help(char **args)
 {
 	int i;
@@ -54,12 +72,22 @@ int func_help(char **args)
 	return (1);
 }
 
+/**
+ * func_exit - exit function
+ *
+ * @args: argument
+ * Return: always 1
+ */
 int func_exit(char **args)
 {
 	(void) args;
 	return (0);
 }
-
+/**
+ * func_launch - launch function
+ * @args: arguments
+ * Return: always 1
+ */
 int func_launch(char **args)
 {
 	pid_t pid;
@@ -84,6 +112,13 @@ int func_launch(char **args)
 	}
 	return (1);
 }
+
+/**
+ * func_execute - execution function
+ * @args: argument
+ *
+ * Return: integer
+ */
 int func_execute(char **args)
 {
 	int i;
@@ -97,6 +132,13 @@ int func_execute(char **args)
 	}
 	return (func_launch(args));
 }
+
+/**
+ * func_read_line - Read the line function
+ *
+ * Return: String line
+ *
+ */
 char *func_read_line(void)
 {
 	#ifdef func_USE_STD_GETLINE
@@ -114,3 +156,114 @@ char *func_read_line(void)
 			}
 		}
 		return (line);
+#else
+#define func_RL_BUFSIZE 1024
+int bufsize = func_RL_BUFSIZE;
+int position = 0;
+char *buffer = malloc(sizeof(char) * bufsize);
+int c;
+		if (!buffer)
+		{
+			fprintf(stderr, "lsh: allocation error\n");
+		exit(EXIT_FAILURE);
+		}
+		while (1)
+		{
+			c = getchar();
+			if (c == EOF)
+				exit(EXIT_SUCCESS);
+			else if (c == '\n')
+			{
+				buffer[position] = '\0';
+				return (buffer);
+			}
+			else
+				buffer[position] = c;
+			position++;
+			if (position >= bufsize)
+			{
+				bufsize += func_RL_BUFSIZE;
+				buffer = realloc(buffer, bufsize);
+				if (!buffer)
+				{
+					fprintf(stderr, "lsh: allocation error\n");
+					exit(EXIT_FAILURE);
+				}
+			}
+		}
+	#endif
+}
+#define func_TOK_BUFSIZE 64
+#define func_TOK_DELIM " \t\r\n\a"
+/**
+ * func_split_line - split entry line
+ *
+ * @line: entry line
+ * Return: Tokens
+ */
+char **func_split_line(char *line)
+{
+	int bufsize = func_TOK_BUFSIZE, position = 0;
+	char **tokens = malloc(bufsize * sizeof(char *));
+	char *token, **tokens_backup;
+
+	if (!tokens)
+	{
+		fprintf(stderr, "lsh: allocation error\n");
+		exit(EXIT_FAILURE);
+	}
+	token = strtok(line, func_TOK_DELIM);
+	while (token != NULL)
+	{
+		tokens[position] = token;
+		position++;
+		if (position >= bufsize)
+		{
+			bufsize += func_TOK_BUFSIZE;
+			tokens_backup = tokens;
+			tokens = realloc(tokens, bufsize * sizeof(char *));
+			if (!tokens)
+			{
+				free(tokens_backup);
+				fprintf(stderr, "lsh: allocation error\n");
+				exit(EXIT_FAILURE);
+			}
+		}
+		token = strtok(NULL, func_TOK_DELIM);
+	}
+	tokens[position] = NULL;
+	return (tokens);
+}
+
+/**
+ * func_loop - loop function
+ *
+ */
+void func_loop(void)
+{
+	char *line;
+	char **args;
+	int status;
+
+	do {
+	printf("> ");
+	line = func_read_line();
+	args = func_split_line(line);
+	status = func_execute(args);
+	free(line);
+	free(args);
+	} while (status);
+}
+/**
+ * main - main function
+ * @argc: argument count
+ * @argv: argument vector
+ * Return: alwayas success
+ */
+int main(int argc, char **argv)
+{
+	(void) argc;
+	(void) argv;
+	func_loop();
+	return (EXIT_SUCCESS);
+}
