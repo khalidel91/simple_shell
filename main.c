@@ -141,7 +141,7 @@ int func_execute(char **args)
  */
 char *func_read_line(void)
 {
-	#ifdef func_USE_STD_GETLINE
+#ifdef func_USE_STD_GETLINE
 		char *line = NULL;
 		ssize_t bufsize = 0;
 
@@ -194,7 +194,7 @@ int c;
 	#endif
 }
 #define func_TOK_BUFSIZE 64
-#define func_TOK_DELIM " \t\r\n\a"
+#define func_TOK_DELIM " \t\r\a"
 /**
  * func_split_line - split entry line
  *
