@@ -8,99 +8,97 @@
  * On error, -1 is returned, and errno is set appropriately.
  */
 
-int _putchar(char ch)
+int _putchar(char c)
 {
-	return (write(1, &ch, 1));
+	return (write(1, &c, 1));
 }
 
 /**
- * _strncpy - copy a string
- * @dest: destination string
- * @src: source string
- * @n: number of characters to copy
- * Return: pointer to destination string
+ * _strncpy - copie a string
+ * @dest: char
+ *  @src: char
+ * @n: int
+ * Return: char
  */
 
 char *_strncpy(char *dest, char *src, int n)
 {
-	int i = 0;
+int x;
 
-	while (i < n && *(src + i))
+x = 0;
+	while (x < n && *(src + x))
 	{
-		*(dest + i) = *(src + i);
-		i++;
+	*(dest + x) = *(src + x);
+	x++;
 	}
-
-	while (i < n)
+	while (x < n)
 	{
-		*(dest + i) = '\0';
-		i++;
+	*(dest + x) = '\0';
+	x++;
 	}
-
 	return (dest);
 }
 
 /**
- * _strlen - length of string
- * @str: input string
- * Return: length of the string
+ * _strlen - lenght of string
+ * @s: char
+ * Return: int
  */
 
-int _strlen(char *str)
+int _strlen(char *s)
 {
-	int len = 0;
+	int x;
 
-	for (; str[len] != '\0'; len++)
-	{
-		continue;
-	}
-
-	return (len);
+		for (x = 0; s[x] != '\0'; x++)
+		{
+			continue;
+		}
+return (x);
 }
 
 /**
- * _atoi - convert to an integer
- * @str: input string
- * Return: converted integer value
+ * _atoi - convert to a int
+ * @s:string
+ * Return:int
  */
 
-int _atoi(char *str)
+int _atoi(char *s)
 {
-	int i = 0, j = 0, num = 0, sign = 1;
+int x, j, n, i;
 
-	while ((str[i] < '0' || str[i] > '9') && (str[i] != '\0'))
+	x = n = 0;
+	i = 1;
+	while ((s[x] < '0' || s[x] > '9') && (s[x] != '\0'))
 	{
-		if (str[i] == '-')
-			sign *= -1;
-		i++;
+		if (s[x] == '-')
+			i *= -1;
+		x++;
 	}
-
-	j = i;
-	while ((str[j] >= '0') && (str[j] <= '9'))
+	j = x;
+	while ((s[j] >= '0') && (s[j] <= '9'))
 	{
-		num = (num * 10) + (i * ((str[j]) - '0'));
+		n = (n * 10) + x * ((s[j]) - '0');
 		j++;
 	}
-
-	return (num * sign);
+	return (n);
 }
 
 /**
  * _puts - print a string
- * @str: input string
- * Return: void
+ * @str:pointer char
+ * return:void
  */
 
 void _puts(char *str)
 {
-	int i = 0;
+	int x;
 
-	while (str[i] != '\0')
+	for (x = 0; str[x] != '\0'; x++)
 	{
-		_putchar(str[i]);
-		i++;
+		_putchar(str[x]);
 	}
-
-	_putchar('\n');
+_putchar('\n');
+return;
 }
+
 

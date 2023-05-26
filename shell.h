@@ -40,11 +40,11 @@ int _isalpha(int c);
 void array_rev(char *arr, int len);
 int intlen(int num);
 char *_itoa(unsigned int n);
-char *string_concatenate(char *dest, char *src);
-char *string_copy(char *dest, char *src);
-char *string_find_char(char *s, char c);
-int string_compare(const char *s1, const char *s2, size_t n);
-char *string_duplicate(char *str);
+char *_strcat(char *dest, char *src);
+char *_strcpy(char *dest, char *src);
+char *_strchr(char *s, char c);
+int _strncmp(const char *s1, const char *s2, size_t n);
+char *_strdup(char *str);
 
 /**###### MEMORY MANAGEMENT ######*/
 
@@ -80,11 +80,11 @@ void exit_bul_for_file(char **cmd, char *line, FILE *fd);
 void hashtag_handle(char *buff);
 int history(char *input);
 int history_dis(char **cmd, int er);
-int display_environment(char **cmd, int er);
-int change_directory(char **cmd, int er);
+int dis_env(char **cmd, int er);
+int change_dir(char **cmd, int er);
 int display_help(char **cmd, int er);
-int echo_command(char **cmd, int er);
-void  exit_shell(char **cmd, char *input, char **argv, int c);
+int echo_bul(char **cmd, int er);
+void  exit_bul(char **cmd, char *input, char **argv, int c);
 int print_echo(char **cmd);
 
 /**###### ERROR HANDLE AND PRINTER ######*/

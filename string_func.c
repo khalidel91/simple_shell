@@ -1,105 +1,120 @@
 #include "shell.h"
 
 /**
- * string_copy - Copy source string to destination string.
- * @dest: Destination string.
- * @src: Source string.
- * Return: Pointer to the destination string.
+ * _strcpy - copy source to destination char
+ * @dest: destination
+ * @src: source
+ * Return: copy of char
  */
 
-char *string_copy(char *dest, char *src)
+char *_strcpy(char *dest, char *src)
 {
-	for (int index = 0; src[index]; index++)
+	int x;
+
+	x = 0;
+
+	while (src[x])
 	{
-		dest[index] = src[index];
+		dest[x] = src[x];
+		x++;
 	}
-	dest[index] = '\0';
-	return dest;
+	dest[x] = '\0';
+	return (dest);
 }
 
 /**
- * string_concatenate - Concatenate two strings.
- * @dest: First string.
- * @src: Second string.
- * Return: Pointer to the concatenated string.
+ * _strcat - concanate two string
+ * @dest: first string
+ * @src: second string
+ * Return: first string + second string char
  */
 
-char *string_concatenate(char *dest, char *src)
+char *_strcat(char *dest, char *src)
 {
-	char *result = dest;
+	char *s = dest;
 
 	while (*dest != '\0')
 	{
 		dest++;
 	}
 
-	for (; *src != '\0'; dest++, src++)
+	while (*src != '\0')
 	{
 		*dest = *src;
+		dest++;
+		src++;
 	}
 	*dest = '\0';
-	return result;
+	return (s);
 }
 
 /**
- * string_find_char - Locate character in string.
- * @s: String to search in.
- * @c: Character to search for.
- * Return: Pointer to the character in the string.
+ * _strchr - Locate Charactere In String
+ * @s:String Search In
+ * @c:Char To Search For
+ * Return: Pointer To Char*
  */
 
-char *string_find_char(char *s, char c)
+char *_strchr(char *s, char c)
 {
-	do
-	{
+
+	do	{
 		if (*s == c)
 		{
 			break;
 		}
-	} while (*s++);
+	}	while (*s++);
 
-	return s;
+	return (s);
 }
 
 /**
- * string_compare - Compare n characters of two strings.
- * @s1: First string.
- * @s2: Second string.
- * @n: Number of characters to compare.
- * Return: 1 if the strings don't match, 0 otherwise.
+ * _strncmp - Compare Amount (n) Of Characters Of Two Strings.
+ * @s1: A String.
+ * @s2: A String.
+ * @n: Amount Of Characters To Compare.
+ *
+ * Return: 1 If The Strings Don't Match Otherwise 0
  */
 
-int string_compare(const char *s1, const char *s2, size_t n)
+int _strncmp(const char *s1, const char *s2, size_t n)
 {
-	for (size_t index = 0; index < n && s2[index]; index++)
+	size_t x;
+
+	if (s1 == NULL)
+		return (-1);
+	for (x = 0; x < n && s2[x]; x++)
 	{
-		if (s1[index] != s2[index])
+		if (s1[x] != s2[x])
 		{
-			return 1;
+			return (1);
 		}
 	}
-	return 0;
+	return (0);
 }
 
 /**
- * string_duplicate - Duplicate a string.
- * @str: String to duplicate.
- * Return: Pointer to the duplicated string, or NULL if failed.
+ * _strdup - Duplicate A String
+ * @str:String
+ * Return: Duplicate String Failed Null
  */
 
-char *string_duplicate(char *str)
+char *_strdup(char *str)
 {
-	size_t len = string_length(str);
-	char *duplicate = malloc(sizeof(char) * (len + 1));
-	if (!duplicate)
+	size_t len, x;
+	char *str2;
+
+	len = _strlen(str);
+	str2 = malloc(sizeof(char) * (len + 1));
+	if (!str2)
 	{
-		return NULL;
+		return (NULL);
 	}
 
-	for (size_t index = 0; index <= len; index++)
+	for (x = 0; x <= len; x++)
 	{
-		duplicate[index] = str[index];
+		str2[x] = str[x];
 	}
 
-	return duplicate;
+	return (str2);
 }

@@ -1,17 +1,17 @@
 #include "shell.h"
 
 /**
- * exit_shell - Exit shell with a given status.
- * @cmd: Parsed command.
- * @input: User input.
- * @argv: Program name.
- * @c: Execution count.
- * Return: Void.
+ * exit_bul - exit statue shell
+ * @cmd: parsed command
+ * @input: user input
+ * @argv:program name
+ * @c:execute count
+ * Return: void (exit statue)
  */
 
-void exit_shell(char **cmd, char *input, char **argv, int c)
+void  exit_bul(char **cmd, char *input, char **argv, int c)
 {
-	int status, x = 0;
+	int stat, x = 0;
 
 	if (cmd[1] == NULL)
 	{
@@ -19,32 +19,32 @@ void exit_shell(char **cmd, char *input, char **argv, int c)
 		free(cmd);
 		exit(EXIT_SUCCESS);
 	}
-
-	for (; cmd[1][x]; x++)
+	while (cmd[1][x])
 	{
-		if (!_isalpha(cmd[1][x++]))
+		if (_isalpha(cmd[1][x++]) != 0)
 		{
-			status = _atoi(cmd[1]);
-			free(input);
-			free(cmd);
-			exit(status);
+			_prerror(argv, c, cmd);
+			break;
 		}
 		else
 		{
-			_print_error(argv, c, cmd);
-			break;
+			stat = _atoi(cmd[1]);
+			free(input);
+			free(cmd);
+			exit(stat);
 		}
 	}
 }
 
+
 /**
- * change_directory - Change directory.
- * @cmd: Parsed command.
- * @er: Status of the last executed command.
- * Return: 0 on success, 1 on failure.
+ * change_dir - change directory
+ * @cmd: parsed command
+ * @er: statue last command executed
+ * Return: 0 Succes 1 Failed (For Old Pwd Always 0 Case No Old PWD)
  */
 
-int change_directory(char **cmd, __attribute__((unused)) int er)
+int change_dir(char **cmd, __attribute__((unused))int er)
 {
 	int value = -1;
 	char cwd[PATH_MAX];
@@ -73,15 +73,15 @@ int change_directory(char **cmd, __attribute__((unused)) int er)
 }
 
 /**
- * display_environment - Display environment variables.
- * @cmd: Parsed command.
- * @er: Status of the last executed command.
- * Return: Always 0.
+ * dis_env - display environment variable
+ * @cmd:parsed command
+ * @er:statue of last command executed
+ * Return:Always 0
  */
 
-int display_environment(__attribute__((unused)) char **cmd, __attribute__((unused)) int er)
+int dis_env(__attribute__((unused)) char **cmd, __attribute__((unused)) int er)
 {
-	size_t x;
+size_t x;
 	int len;
 
 	for (x = 0; environ[x] != NULL; x++)
@@ -94,13 +94,13 @@ int display_environment(__attribute__((unused)) char **cmd, __attribute__((unuse
 }
 
 /**
- * display_help - Display help for built-in commands.
- * @cmd: Parsed command.
- * @er: Status of the last executed command.
- * Return: 0 on success, -1 on failure.
+ * display_help - Displaying Help For Builtin
+ * @cmd:Parsed Command
+ * @er: Statue Of Last Command Excuted
+ * Return: 0 Succes -1 Fail
  */
 
-int display_help(char **cmd, __attribute__((unused)) int er)
+int display_help(char **cmd, __attribute__((unused))int er)
 {
 	int fd, fw, rd = 1;
 	char s;
@@ -111,7 +111,6 @@ int display_help(char **cmd, __attribute__((unused)) int er)
 		perror("Error");
 		return (0);
 	}
-
 	while (rd > 0)
 	{
 		rd = read(fd, &s, 1);
@@ -121,22 +120,21 @@ int display_help(char **cmd, __attribute__((unused)) int er)
 			return (-1);
 		}
 	}
-
 	_putchar('\n');
 	return (0);
 }
 
 /**
- * echo_command - Execute echo command.
- * @st: Status of the last executed command.
- * @cmd: Parsed command.
- * Return: 0 on success, or execute normal echo.
+ * echo_bul - execute echo cases
+ * @st:statue of last command executed
+ * @cmd: Parsed Command
+ * Return: Always 0 Or Excute Normal Echo
  */
 
-int echo_command(char **cmd, int st)
+int echo_bul(char **cmd, int st)
 {
 	char *path;
-	unsigned int pid = getppid();
+	unsigned int  pid = getppid();
 
 	if (_strncmp(cmd[1], "$?", 2) == 0)
 	{
@@ -147,6 +145,7 @@ int echo_command(char **cmd, int st)
 	{
 		print_number(pid);
 		PRINTER("\n");
+
 	}
 	else if (_strncmp(cmd[1], "$PATH", 5) == 0)
 	{
@@ -154,10 +153,10 @@ int echo_command(char **cmd, int st)
 		PRINTER(path);
 		PRINTER("\n");
 		free(path);
+
 	}
 	else
 		return (print_echo(cmd));
 
 	return (1);
 }
-
