@@ -139,60 +139,29 @@ int func_execute(char **args)
  * Return: String line
  *
  */
+
+#define _GNU_SOURCE
 char *func_read_line(void)
 {
-#ifdef func_USE_STD_GETLINE
-		char *line = NULL;
-		ssize_t bufsize = 0;
+    char *line = NULL;
+    size_t bufsize = 0;
+    ssize_t n_char;
 
-		if (getline(&line, &bufsize, stdin) == -1)
-		{
-			if (feof(stdin))
-				exit(EXIT_SUCCESS);
-			else
-			{
-				perror("lsh: getline\n");
-				exit(EXIT_FAILURE);
-			}
-		}
-		return (line);
-#else
-#define func_RL_BUFSIZE 1024
-int bufsize = func_RL_BUFSIZE;
-int position = 0;
-char *buffer = malloc(sizeof(char) * bufsize);
-int c;
-		if (!buffer)
-		{
-			fprintf(stderr, "lsh: allocation error\n");
-		exit(EXIT_FAILURE);
-		}
-		while (1)
-		{
-			c = getchar();
-			if (c == EOF)
-				exit(EXIT_SUCCESS);
-			else if (c == '\n')
-			{
-				buffer[position] = '\0';
-				return (buffer);
-			}
-			else
-				buffer[position] = c;
-			position++;
-			if (position >= bufsize)
-			{
-				bufsize += func_RL_BUFSIZE;
-				buffer = realloc(buffer, bufsize);
-				if (!buffer)
-				{
-					fprintf(stderr, "lsh: allocation error\n");
-					exit(EXIT_FAILURE);
-				}
-			}
-		}
-	#endif
+    n_char = getline(&line, &bufsize, stdin);
+    if (n_char == -1)
+    {
+        if (feof(stdin))
+            exit(EXIT_SUCCESS);
+        else
+        {
+            perror("lsh: getline\n");
+            exit(EXIT_FAILURE);
+        }
+    }
+    return line;
 }
+
+
 #define func_TOK_BUFSIZE 64
 #define func_TOK_DELIM " \t\r\a"
 /**
