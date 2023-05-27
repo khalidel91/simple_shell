@@ -1,101 +1,101 @@
 #include "shell.h"
 
 /**
- * search_path_cmd - search in $PATH for executable command
+ * path_cmd -  search in $PATH for executable command
  * @cmd: parsed input
- * Return: 1 (Failure) or 0 (Success)
+ * Return: 1  Failure  0  Success.
  */
-int search_path_cmd(char **cmd)
+
+int path_cmd(char **cmd)
 {
-	char *path, *dir, *cmd_path;
+	char *path, *value, *cmd_path;
 	struct stat buf;
 
 	path = _getenv("PATH");
-	dir = _strtok(path, ":");
-	while (dir != NULL)
+	value = _strtok(path, ":");
+	while (value != NULL)
 	{
-		cmd_path = build(*cmd, dir);
+		cmd_path = build(*cmd, value);
 		if (stat(cmd_path, &buf) == 0)
 		{
 			*cmd = _strdup(cmd_path);
 			free(cmd_path);
 			free(path);
-			return 0;
+			return (0);
 		}
 		free(cmd_path);
-		dir = _strtok(NULL, ":");
+		value = _strtok(NULL, ":");
 	}
 	free(path);
 
-	return 1;
+	return (1);
 }
 
 /**
- * build_cmd_path - build full path of command
- * @cmd: executable command
- * @dir: directory to concatenate with command
- * Return: parsed full path of command or NULL in case of failure
+ * build - build command
+ * @token: executable command
+ * @value: directory concanating command
+ *
+ * Return: parsed full path of command or NULL case failed
  */
-char *build(char *cmd, char *dir)
+
+char *build(char *token, char *value)
 {
-	char *cmd_path;
-	size_t dir_len, cmd_len, path_len;
+	char *cmd;
+	size_t length;
 
-	dir_len = _strlen(dir);
-	cmd_len = _strlen(cmd);
-	path_len = dir_len + cmd_len + 2;
-
-	cmd_path = malloc(sizeof(char) * path_len);
-	if (cmd_path == NULL)
+	length = _strlen(value) + _strlen(token) + 2;
+	cmd = malloc(sizeof(char) * length);
+	if (cmd == NULL)
 	{
-		return NULL;
+		return (NULL);
 	}
 
-	memset(cmd_path, 0, path_len);
+	memset(cmd, 0, length);
 
-	cmd_path = _strcat(cmd_path, dir);
-	cmd_path = _strcat(cmd_path, "/");
-	cmd_path = _strcat(cmd_path, cmd);
+	cmd = _strcat(cmd, value);
+	cmd = _strcat(cmd, "/");
+	cmd = _strcat(cmd, token);
 
-	return cmd_path;
+	return (cmd);
 }
 
 /**
- * _getenv - gets the value of environment variable by name
+ * _getenv - gets the value of enviroment variable by name
  * @name: environment variable name
- * Return: the value of the environment variable or NULL
+ * Return: the value of the environment variable else NULL.
  */
+
 char *_getenv(char *name)
 {
-	size_t name_len, value_len;
+	size_t nl, vl;
 	char *value;
-	int i, j, k;
+	int x, i, j;
 
-	name_len = _strlen(name);
-	for (i = 0; environ[i]; i++)
+	nl = _strlen(name);
+	for (x = 0 ; environ[x]; x++)
 	{
-		if (_strncmp(name, environ[i], name_len) == 0)
+		if (_strncmp(name, environ[x], nl) == 0)
 		{
-			value_len = _strlen(environ[i]) - name_len;
-			value = malloc(sizeof(char) * value_len);
+			vl = _strlen(environ[x]) - nl;
+			value = malloc(sizeof(char) * vl);
 			if (!value)
 			{
 				free(value);
-				perror("unable to allocate memory");
-				return NULL;
+				perror("unable to alloc");
+				return (NULL);
 			}
 
 			j = 0;
-			for (k = name_len + 1; environ[i][k]; k++, j++)
+			for (i = nl + 1; environ[x][i]; i++, j++)
 			{
-				value[j] = environ[i][k];
+				value[j] = environ[x][i];
 			}
 			value[j] = '\0';
 
-			return value;
+			return (value);
 		}
 	}
 
-	return NULL;
+	return (NULL);
 }
-

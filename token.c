@@ -1,9 +1,9 @@
 #include "shell.h"
 
 /**
- * parse_cmd - parse command
- * @input: user input to be parsed
- * Return: array of char
+ * parse_cmd - parse line of input
+ * @input: user input to parse
+ * Return: array of char (parsed):Simple Shell
  */
 
 char **parse_cmd(char *input)

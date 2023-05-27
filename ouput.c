@@ -1,25 +1,24 @@
 #include "shell.h"
 
 /**
- * print_error - print custom error message
+ * _prerror - print custom error
  * @argv: program name
- * @count: error count
+ * @c: error count
  * @cmd: command
  * Return: void
  */
-void _prerror(char **argv, int count, char **cmd)
+
+void _prerror(char **argv, int c, char **cmd)
 {
-	char *error_count = _itoa(count);
+	char *er = _itoa(c);
 
 	PRINTER(argv[0]);
 	PRINTER(": ");
-	PRINTER(error_count);
+	PRINTER(er);
 	PRINTER(": ");
 	PRINTER(cmd[0]);
 	PRINTER(": Illegal number: ");
 	PRINTER(cmd[1]);
 	PRINTER("\n");
-
-	free(error_count);
+	free(er);
 }
-

@@ -1,60 +1,59 @@
 #include "shell.h"
 
 /**
- * history_display - display history of user input in the simple shell
- * @cmd: parsed command
- * @status: status of the last execution
- * Return: 0 for success, -1 for failure
+ * history_dis - display history of user input simple shell
+ * @c: parsed command
+ * @s: statue of last execute
+ * Return: 0 Succes -1 Fail
  */
-int history_display(__attribute__((unused)) char **cmd, __attribute__((unused)) int status)
+int history_dis(__attribute__((unused))char **c, __attribute__((unused))int s)
 {
 	char *filename = ".simple_shell_history";
-	FILE *file_ptr;
+	FILE *fp;
 	char *line = NULL;
-	size_t line_length = 0;
-	int counter = 0;
-	char *error_message;
+	size_t length = 0;
+	int ctr = 0;
+	char *er;
 
-	file_ptr = fopen(filename, "r");
-	if (file_ptr == NULL)
+	fp = fopen(filename, "r");
+	if (fp == NULL)
 	{
 		return (-1);
 	}
-
-	while ((getline(&line, &line_length, file_ptr)) != -1)
+	while ((getline(&line, &length, fp)) != -1)
 	{
-		counter++;
-		error_message = _itoa(counter);
-		PRINTER(error_message);
-		free(error_message);
+		ctr++;
+		er = _itoa(ctr);
+		PRINTER(er);
+		free(er);
 		PRINTER(" ");
 		PRINTER(line);
+
 	}
-
-	if (line != NULL)
+	if (line)
 		free(line);
-
-	fclose(file_ptr);
+	fclose(fp);
 	return (0);
 }
 
 /**
- * execute_echo - execute the echo command
+ * print_echo - execute normal echo
  * @cmd: parsed command
- * Return: 0 for success, -1 for failure
+ * Return: 0 Succes -1 Fail
  */
-int execute_echo(char **cmd)
+
+int print_echo(char **cmd)
 {
 	pid_t pid;
-	int status;
+	int stat;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		if (execve("/bin/echo", cmd, environ) == -1)
-		{
-			return (-1);
-		}
+	if (execve("/bin/echo", cmd, environ) == -1)
+	{
+		return (-1);
+	}
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
@@ -63,12 +62,9 @@ int execute_echo(char **cmd)
 	}
 	else
 	{
-		do
-		{
-			waitpid(pid, &status, WUNTRACED);
-		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+		do {
+			waitpid(pid, &stat, WUNTRACED);
+		} while (!WIFEXITED(stat) && !WIFSIGNALED(stat));
 	}
-
 	return (1);
 }
-
