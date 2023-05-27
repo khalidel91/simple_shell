@@ -14,7 +14,7 @@ int search_path_cmd(char **cmd)
 	dir = _strtok(path, ":");
 	while (dir != NULL)
 	{
-		cmd_path = build_cmd_path(*cmd, dir);
+		cmd_path = build(*cmd, dir);
 		if (stat(cmd_path, &buf) == 0)
 		{
 			*cmd = _strdup(cmd_path);
@@ -36,7 +36,7 @@ int search_path_cmd(char **cmd)
  * @dir: directory to concatenate with command
  * Return: parsed full path of command or NULL in case of failure
  */
-char *build_cmd_path(char *cmd, char *dir)
+char *build(char *cmd, char *dir)
 {
 	char *cmd_path;
 	size_t dir_len, cmd_len, path_len;
@@ -69,7 +69,7 @@ char *_getenv(char *name)
 {
 	size_t name_len, value_len;
 	char *value;
-	int i, j;
+	int i, j, k;
 
 	name_len = _strlen(name);
 	for (i = 0; environ[i]; i++)
@@ -86,7 +86,7 @@ char *_getenv(char *name)
 			}
 
 			j = 0;
-			for (int k = name_len + 1; environ[i][k]; k++, j++)
+			for (k = name_len + 1; environ[i][k]; k++, j++)
 			{
 				value[j] = environ[i][k];
 			}

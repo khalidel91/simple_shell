@@ -59,7 +59,7 @@ char *_itoa(unsigned int n)
 	int length = 0, i = 0;
 	char *s;
 
-	length = int_len(n);
+	length = intlen(n);
 	s = malloc(length + 1);
 	if (!s)
 		return (NULL);
@@ -71,7 +71,7 @@ char *_itoa(unsigned int n)
 		i++;
 	}
 	s[i] = (n % 10) + '0';
-	array_reverse(s, length);
+	array_rev(s, length);
 	s[i + 1] = '\0';
 	return (s);
 }
@@ -82,7 +82,7 @@ char *_itoa(unsigned int n)
  * @len: length of the array
  * Return: void (reverse the array in-place)
  */
-void array_reverse(char *arr, int len)
+void array_rev(char *arr, int len)
 {
 	int i;
 	char tmp;

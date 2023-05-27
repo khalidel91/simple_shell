@@ -1,40 +1,33 @@
 #include "shell.h"
 
 /**
- * parse_cmd - parse line of input
- * @input: user input to parse
- * Return: array of char (parsed) or NULL if failed
+ * parse_cmd - parse command
+ * @input: user input to be parsed
+ * Return: array of char
  */
+
 char **parse_cmd(char *input)
 {
 	char **tokens;
 	char *token;
-	int i, bufsize = BUFSIZE;
+	int x, buffsize = BUFSIZE;
 
 	if (input == NULL)
-		return NULL;
-
-	tokens = malloc(sizeof(char *) * bufsize);
+		return (NULL);
+	tokens = malloc(sizeof(char *) * buffsize);
 	if (!tokens)
 	{
-		perror("parse_cmd");
-		return NULL;
+		perror("hsh");
+		return (NULL);
 	}
 
-	token = _strtok(input, " \t\n"); // Updated delimiter to include whitespace
-	for (i = 0; token; i++)
+	token = _strtok(input, "\n ");
+	for (x = 0; token; x++)
 	{
-		tokens[i] = _strdup(token); // Use _strdup to allocate memory for each token
-		if (!tokens[i])
-		{
-			perror("parse_cmd");
-			free_tokens(tokens); // Free allocated memory for tokens before returning NULL
-			return NULL;
-		}
-		token = _strtok(NULL, " \t\n");
+		tokens[x] = token;
+		token = _strtok(NULL, "\n ");
 	}
-	tokens[i] = NULL;
+	tokens[x] = NULL;
 
-	return tokens;
+	return (tokens);
 }
-

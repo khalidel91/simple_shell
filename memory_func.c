@@ -26,7 +26,7 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 
 	if (ptr == NULL)
 	{
-		fill_array(result, '\0', new_size);
+		fill_an_array(result, '\0', new_size);
 	}
 	else
 	{
@@ -75,7 +75,7 @@ char *_memcpy(char *dest, char *src, unsigned int n)
  * @size: size of the array
  * Return: void pointer
  */
-void *fill_array(void *array, int value, unsigned int size)
+void *fill_an_array(void *array, int value, unsigned int size)
 {
 	char *ptr = array;
 	unsigned int i;

@@ -7,7 +7,7 @@
  * @cmd: command
  * Return: void
  */
-void print_error(char **argv, int count, char **cmd)
+void _prerror(char **argv, int count, char **cmd)
 {
 	char *error_count = _itoa(count);
 

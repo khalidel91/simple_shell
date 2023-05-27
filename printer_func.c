@@ -20,7 +20,7 @@ void print_unsigned_number(unsigned int num)
  * @num: integer
  * Return: void
  */
-void print_number(int num)
+void print_number_in(int num)
 {
 	unsigned int digit;
 
