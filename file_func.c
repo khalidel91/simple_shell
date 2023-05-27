@@ -2,9 +2,9 @@
 
 /**
  * read_file - Read Command From File
- * @filename:Filename
- * @argv:Program Name
- * Return: -1 or  0
+ * @filename: Filename
+ * @argv: Program Name
+ * Return: -1 or 0
  */
 
 void read_file(char *filename, char **argv)
@@ -19,11 +19,10 @@ void read_file(char *filename, char **argv)
 	{
 		exit(EXIT_FAILURE);
 	}
-	while ((getline(&line, &len, fp)) != -1)
+	while (getline(&line, &len, fp) != -1)
 	{
 		ctr++;
 		treat_file(line, ctr, fp, argv);
-
 	}
 	if (line)
 		free(line);
@@ -37,7 +36,7 @@ void read_file(char *filename, char **argv)
  * @counter: error counter
  * @fp: file descriptor
  * @argv: program name
- * Return : execute a line void
+ * Return: execute a line void
  */
 
 void treat_file(char *line, int counter, FILE *fp, char **argv)
@@ -47,28 +46,28 @@ void treat_file(char *line, int counter, FILE *fp, char **argv)
 
 	cmd = parse_cmd(line);
 
-		if (_strncmp(cmd[0], "exit", 4) == 0)
-		{
-			exit_bul_for_file(cmd, line, fp);
-		}
-		else if (check_builtin(cmd) == 0)
-		{
-			sta = handle_builtin(cmd, sta);
-			free(cmd);
-		}
-		else
-		{
-			sta = check_cmd(cmd, line, counter, argv);
-			free(cmd);
-		}
+	if (_strncmp(cmd[0], "exit", 4) == 0)
+	{
+		exit_bul_for_file(cmd, line, fp);
+	}
+	else if (check_builtin(cmd) == 0)
+	{
+		sta = handle_builtin(cmd, sta);
+		free(cmd);
+	}
+	else
+	{
+		sta = check_cmd(cmd, line, counter, argv);
+		free(cmd);
+	}
 }
 
 /**
  * exit_bul_for_file - exit shell case of file
- * @line: line from a file
  * @cmd: parsed command
+ * @line: line from a file
  * @fd: file descriptor
- * Return : case of exit in a file line
+ * Return: case of exit in a file line
  */
 
 void exit_bul_for_file(char **cmd, char *line, FILE *fd)
@@ -94,5 +93,5 @@ void exit_bul_for_file(char **cmd, char *line, FILE *fd)
 	free(cmd);
 	fclose(fd);
 	exit(stat);
-
 }
+

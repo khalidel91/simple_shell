@@ -14,89 +14,83 @@ int _putchar(char c)
 }
 
 /**
- * _strncpy - copie a string
- * @dest: char
- *  @src: char
- * @n: int
- * Return: char
+ * _strncpy - copy a string
+ * @dest: destination string
+ * @src: source string
+ * @n: number of characters to copy
+ * Return: pointer to the destination string
  */
 
 char *_strncpy(char *dest, char *src, int n)
 {
-int x;
+	int index;
 
-x = 0;
-	while (x < n && *(src + x))
-	{
-	*(dest + x) = *(src + x);
-	x++;
-	}
-	while (x < n)
-	{
-	*(dest + x) = '\0';
-	x++;
-	}
+	for (index = 0; index < n && src[index]; index++)
+		dest[index] = src[index];
+
+	for (; index < n; index++)
+		dest[index] = '\0';
+
 	return (dest);
 }
 
 /**
- * _strlen - lenght of string
- * @s: char
- * Return: int
+ * _strlen - length of a string
+ * @s: input string
+ * Return: length of the string
  */
 
 int _strlen(char *s)
 {
-	int x;
+	int length;
 
-		for (x = 0; s[x] != '\0'; x++)
-		{
-			continue;
-		}
-return (x);
+	for (length = 0; s[length] != '\0'; length++)
+		continue;
+
+	return (length);
 }
 
 /**
- * _atoi - convert to a int
- * @s:string
- * Return:int
+ * _atoi - convert a string to an integer
+ * @s: input string
+ * Return: converted integer
  */
 
 int _atoi(char *s)
 {
-int x, j, n, i;
+	int index, sign, result;
 
-	x = n = 0;
-	i = 1;
-	while ((s[x] < '0' || s[x] > '9') && (s[x] != '\0'))
+	index = sign = result = 0;
+	while ((s[index] < '0' || s[index] > '9') && (s[index] != '\0'))
 	{
-		if (s[x] == '-')
-			i *= -1;
-		x++;
+		if (s[index] == '-')
+			sign *= -1;
+		index++;
 	}
-	j = x;
-	while ((s[j] >= '0') && (s[j] <= '9'))
+
+	while ((s[index] >= '0') && (s[index] <= '9'))
 	{
-		n = (n * 10) + x * ((s[j]) - '0');
-		j++;
+		result = (result * 10) + sign * ((s[index]) - '0');
+		index++;
 	}
-	return (n);
+
+	return (result);
 }
 
 /**
  * _puts - print a string
- * @str:pointer char
- * return:void
+ * @str: input string
+ * Return: void
  */
 
 void _puts(char *str)
 {
-	int x;
+	int index;
 
-	for (x = 0; str[x] != '\0'; x++)
-	{
-		_putchar(str[x]);
-	}
-_putchar('\n');
-return;
+	for (index = 0; str[index] != '\0'; index++)
+		_putchar(str[index]);
+
+	_putchar('\n');
+	return;
 }
+

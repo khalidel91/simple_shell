@@ -1,67 +1,68 @@
 #include "shell.h"
 
 /**
-* _getline - read the input by user from stdin
-* Return: input
-*/
+ * _getline - read the input by user from stdin
+ * Return: input
+ */
 
 char *_getline()
 {
-int x, buffsize = BUFSIZE, rd;
-char s = 0;
-char *buff = malloc(buffsize);
+    int index, buffsize = BUFSIZE, rd;
+    char c = 0;
+    char *buffer = malloc(buffsize);
 
-	if (buff == NULL)
-	{
-		free(buff);
-		return (NULL);
-	}
+    if (buffer == NULL)
+    {
+        free(buffer);
+        return (NULL);
+    }
 
-	for (x = 0; s != EOF && s != '\n'; x++)
-	{
-		fflush(stdin);
-		rd = read(STDIN_FILENO, &s, 1);
-		if (rd == 0)
-		{
-			free(buff);
-			exit(EXIT_SUCCESS);
-		}
-		buff[x] = s;
-		if (buff[0] == '\n')
-		{
-			free(buff);
-			return ("\0");
-		}
-		if (x >= buffsize)
-		{
-			buff = _realloc(buff, buffsize, buffsize + 1);
-			if (buff == NULL)
-			{
-				return (NULL);
-			}
-		}
-	}
-	buff[x] = '\0';
-	hashtag_handle(buff);
-	return (buff);
+    for (index = 0; c != EOF && c != '\n'; index++)
+    {
+        fflush(stdin);
+        rd = read(STDIN_FILENO, &c, 1);
+        if (rd == 0)
+        {
+            free(buffer);
+            exit(EXIT_SUCCESS);
+        }
+        buffer[index] = c;
+        if (buffer[0] == '\n')
+        {
+            free(buffer);
+            return ("\0");
+        }
+        if (index >= buffsize)
+        {
+            buffer = _realloc(buffer, buffsize, buffsize + 1);
+            if (buffer == NULL)
+            {
+                return (NULL);
+            }
+        }
+    }
+    buffer[index] = '\0';
+    hashtag_handle(buffer);
+    return (buffer);
 }
 
 /**
  * hashtag_handle - remove everything after #
- * @buff: input;
- * Return:void
+ * @buffer: input;
+ * Return: void
  */
 
-void hashtag_handle(char *buff)
+void hashtag_handle(char *buffer)
 {
-	int x;
+    int index;
 
-		for (x = 0; buff[x] != '\0'; x++)
-		{
-			if (buff[x] == '#')
-			{
-			buff[x] = '\0';
-			break;
-			}
-	}
+    for (index = 0; buffer[index] != '\0'; index++)
+    {
+        if (buffer[index] == '#')
+        {
+            buffer[index] = '\0';
+            break;
+        }
+    }
 }
+

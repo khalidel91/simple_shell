@@ -1,37 +1,38 @@
 #include "shell.h"
 
 /**
- * exit_bul - exit statue shell
- * @cmd: parsed command
+ * exit_bul - exit status shell
+ * @args: parsed command
  * @input: user input
- * @argv:program name
- * @c:execute count
- * Return: void (exit statue)
+ * @program_name: program name
+ * @execute_count: execute count
+ * Return: void (exit status)
  */
 
-void  exit_bul(char **cmd, char *input, char **argv, int c)
+void exit_bul(char **args, char *input, char **program_name, int execute_count)
 {
-	int stat, x = 0;
+	int status, index = 0;
 
-	if (cmd[1] == NULL)
+	if (args[1] == NULL)
 	{
 		free(input);
-		free(cmd);
+		free(args);
 		exit(EXIT_SUCCESS);
 	}
-	while (cmd[1][x])
+
+	while (args[1][index])
 	{
-		if (_isalpha(cmd[1][x++]) != 0)
+		if (_isalpha(args[1][index++]) != 0)
 		{
-			_prerror(argv, c, cmd);
+			_prerror(program_name, execute_count, args);
 			break;
 		}
 		else
 		{
-			stat = _atoi(cmd[1]);
+			status = _atoi(args[1]);
 			free(input);
-			free(cmd);
-			exit(stat);
+			free(args);
+			exit(status);
 		}
 	}
 }
@@ -39,31 +40,31 @@ void  exit_bul(char **cmd, char *input, char **argv, int c)
 
 /**
  * change_dir - change directory
- * @cmd: parsed command
- * @er: statue last command executed
- * Return: 0 Succes 1 Failed (For Old Pwd Always 0 Case No Old PWD)
+ * @args: parsed command
+ * @last_status: status of the last command executed
+ * Return: 0 Success, 1 Failed (For Old Pwd Always 0 Case No Old PWD)
  */
 
-int change_dir(char **cmd, __attribute__((unused))int er)
+int change_dir(char **args, __attribute__((unused)) int last_status)
 {
-	int value = -1;
+	int result = -1;
 	char cwd[PATH_MAX];
 
-	if (cmd[1] == NULL)
-		value = chdir(getenv("HOME"));
-	else if (_strcmp(cmd[1], "-") == 0)
+	if (args[1] == NULL)
+		result = chdir(getenv("HOME"));
+	else if (_strcmp(args[1], "-") == 0)
 	{
-		value = chdir(getenv("OLDPWD"));
+		result = chdir(getenv("OLDPWD"));
 	}
 	else
-		value = chdir(cmd[1]);
+		result = chdir(args[1]);
 
-	if (value == -1)
+	if (result == -1)
 	{
 		perror("hsh");
 		return (-1);
 	}
-	else if (value != -1)
+	else if (result != -1)
 	{
 		getcwd(cwd, sizeof(cwd));
 		setenv("OLDPWD", getenv("PWD"), 1);
@@ -74,20 +75,20 @@ int change_dir(char **cmd, __attribute__((unused))int er)
 
 /**
  * dis_env - display environment variable
- * @cmd:parsed command
- * @er:statue of last command executed
- * Return:Always 0
+ * @args: parsed command
+ * @last_status: status of the last command executed
+ * Return: Always 0
  */
 
-int dis_env(__attribute__((unused)) char **cmd, __attribute__((unused)) int er)
+int dis_env(__attribute__((unused)) char **args, __attribute__((unused)) int last_status)
 {
-size_t x;
+	size_t index;
 	int len;
 
-	for (x = 0; environ[x] != NULL; x++)
+	for (index = 0; environ[index] != NULL; index++)
 	{
-		len = _strlen(environ[x]);
-		write(1, environ[x], len);
+		len = _strlen(environ[index]);
+		write(1, environ[index], len);
 		write(STDOUT_FILENO, "\n", 1);
 	}
 	return (0);
@@ -95,17 +96,17 @@ size_t x;
 
 /**
  * display_help - Displaying Help For Builtin
- * @cmd:Parsed Command
- * @er: Statue Of Last Command Excuted
- * Return: 0 Succes -1 Fail
+ * @args: parsed command
+ * @last_status: status of the last command executed
+ * Return: 0 Success, -1 Fail
  */
 
-int display_help(char **cmd, __attribute__((unused))int er)
+int display_help(char **args, __attribute__((unused)) int last_status)
 {
 	int fd, fw, rd = 1;
 	char s;
 
-	fd = open(cmd[1], O_RDONLY);
+	fd = open(args[1], O_RDONLY);
 	if (fd < 0)
 	{
 		perror("Error");
@@ -126,37 +127,36 @@ int display_help(char **cmd, __attribute__((unused))int er)
 
 /**
  * echo_bul - execute echo cases
- * @st:statue of last command executed
- * @cmd: Parsed Command
- * Return: Always 0 Or Excute Normal Echo
+ * @last_status: status of last command executed
+ * @args: parsed command
+ * Return: Always 0 Or Execute Normal Echo
  */
 
-int echo_bul(char **cmd, int st)
+int echo_bul(char **args, int last_status)
 {
 	char *path;
 	unsigned int  pid = getppid();
 
-	if (_strncmp(cmd[1], "$?", 2) == 0)
+	if (_strncmp(args[1], "$?", 2) == 0)
 	{
-		print_number_in(st);
+		print_number_in(last_status);
 		PRINTER("\n");
 	}
-	else if (_strncmp(cmd[1], "$$", 2) == 0)
+	else if (_strncmp(args[1], "$$", 2) == 0)
 	{
 		print_number(pid);
 		PRINTER("\n");
-
 	}
-	else if (_strncmp(cmd[1], "$PATH", 5) == 0)
+	else if (_strncmp(args[1], "$PATH", 5) == 0)
 	{
 		path = _getenv("PATH");
 		PRINTER(path);
 		PRINTER("\n");
 		free(path);
-
 	}
 	else
-		return (print_echo(cmd));
+		return (print_echo(args));
 
 	return (1);
 }
+

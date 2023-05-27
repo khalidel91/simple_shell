@@ -4,12 +4,12 @@
  * handle_builtin - Handle Builtin Command
  * @cmd: parsed command
  * @er: statue of last execute
- * Return: -1 Fail 0 Succes (Return :Excute Builtin)
+ * Return: -1 Fail 0 Success (Return: Execute Builtin)
  */
 
 int handle_builtin(char **cmd, int er)
 {
-	 bul_t bil[] = {
+	bul_t bil[] = {
 		{"cd", change_dir},
 		{"env", dis_env},
 		{"help", display_help},
@@ -19,11 +19,11 @@ int handle_builtin(char **cmd, int er)
 	};
 	int x = 0;
 
-	while ((bil + x)->command)
+	while (bil[x].command != NULL)
 	{
-		if (_strcmp(cmd[0], (bil + x)->command) == 0)
+		if (_strcmp(cmd[0], bil[x].command) == 0)
 		{
-			return ((bil + x)->fun(cmd, er));
+			return (bil[x].fun(cmd, er));
 		}
 		x++;
 	}
@@ -45,7 +45,7 @@ int check_cmd(char **cmd, char *input, int c, char **argv)
 	int sts;
 	pid_t pid;
 
-	if (*cmd == NULL)
+	if (cmd[0] == NULL)
 	{
 		return (-1);
 	}
@@ -59,12 +59,12 @@ int check_cmd(char **cmd, char *input, int c, char **argv)
 
 	if (pid == 0)
 	{
-		if (_strncmp(*cmd, "./", 2) != 0 && _strncmp(*cmd, "/", 1) != 0)
+		if (_strncmp(cmd[0], "./", 2) != 0 && _strncmp(cmd[0], "/", 1) != 0)
 		{
 			path_cmd(cmd);
 		}
 
-		if (execve(*cmd, cmd, environ) == -1)
+		if (execve(cmd[0], cmd, environ) == -1)
 		{
 			print_error(cmd[0], c, argv);
 			free(input);
@@ -90,3 +90,4 @@ void signal_to_handel(int sig)
 		PRINTER("\n$ ");
 	}
 }
+
