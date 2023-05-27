@@ -1,11 +1,11 @@
 #include "shell.h"
 
 /**
- **_realloc -  reallocates a memory block
- *@ptr: the pointer
- *@old_size: previous size of the pointer
- *@new_size: new size of the pointer
- *Return: void pointer rellocated
+ * _realloc - reallocates a memory block using malloc and free
+ * @ptr: pointer
+ * @old_size: previous size of the pointer
+ * @new_size: new size of the pointer
+ * Return: void pointer to the reallocated memory
  */
 void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 {
@@ -13,101 +13,103 @@ void *_realloc(void *ptr, unsigned int old_size, unsigned int new_size)
 
 	if (new_size == old_size)
 		return (ptr);
+
 	if (new_size == 0 && ptr)
 	{
 		free(ptr);
 		return (NULL);
 	}
+
 	result = malloc(new_size);
 	if (result == NULL)
 		return (NULL);
+
 	if (ptr == NULL)
 	{
-		fill_an_array(result, '\0', new_size);
-		free(ptr);
+		fill_array(result, '\0', new_size);
 	}
 	else
 	{
-		_memcpy(result, ptr, old_size);
+		memcpy(result, ptr, old_size);
 		free(ptr);
 	}
-	return (result);
 
+	return (result);
 }
 
 /**
- * free_all - free array
+ * free_all - free array of char pointers and a char pointer
  * @cmd: array pointer
  * @line: char pointer
  * Return: void
  */
-
 void free_all(char **cmd, char *line)
 {
 	free(cmd);
 	free(line);
-	cmd = NULL;
-	line = NULL;
 }
 
 /**
- * _memcpy - copy byte
- * @dest: destination ptr
- * @src: source ptr
- * @n: size
- *Return: void pointer
+ * _memcpy - copy bytes from source to destination
+ * @dest: destination pointer
+ * @src: source pointer
+ * @n: number of bytes to copy
+ * Return: void pointer
  */
-
 char *_memcpy(char *dest, char *src, unsigned int n)
 {
-	unsigned int x;
+	unsigned int i;
 
-	for (x = 0; x < n; x++)
+	for (i = 0; i < n; i++)
 	{
-		dest[x] = src[x];
+		dest[i] = src[i];
 	}
+
 	return (dest);
 }
 
 /**
- * fill_an_array - fill an array by constant byte
- * @a: void pointer
- * @el: int
- * @len: length int
- *Return: void pointer
- */
-
-void *fill_an_array(void *a, int el, unsigned int len)
-{
-	char *p = a;
-	unsigned int x = 0;
-
-	while (x < len)
-	{
-		*p = el;
-		p++;
-		x++;
-	}
-	return (a);
-}
-/**
- * _calloc -  allocate memory for an array
- * @size: size to be allocated
+ * fill_array - fill an array with a constant byte
+ * @array: array pointer
+ * @value: constant byte value
+ * @size: size of the array
  * Return: void pointer
+ */
+void *fill_array(void *array, int value, unsigned int size)
+{
+	char *ptr = array;
+	unsigned int i;
+
+	for (i = 0; i < size; i++)
+	{
+		ptr[i] = value;
+	}
+
+	return (array);
+}
+
+/**
+ * _calloc - allocates memory for an array, using malloc
+ * @size: size of the array
+ * Return: void pointer to the allocated memory
  */
 void *_calloc(unsigned int size)
 {
-	char *a;
-	unsigned int x;
+	char *array;
+	unsigned int i;
 
 	if (size == 0)
-	return (NULL);
-	a = malloc(size);
-	if (a == NULL)
-	return (NULL);
-	for (x = 0; x < size; x++)
+		return (NULL);
+
+	array = malloc(size);
+	if (array == NULL)
+		return (NULL);
+
+	for (i = 0; i < size; i++)
 	{
-		a[x] = '\0';
+		array[i] = '\0';
 	}
-	return (a);
+
+	return (array);
 }
+

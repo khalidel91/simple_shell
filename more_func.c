@@ -1,59 +1,60 @@
 #include "shell.h"
 
 /**
- * history_dis - display history
- * @c: parsed command
- * @s: statue of last execute
- * Return: 0 Succes -1 Fail
+ * history_display - display history of user input in the simple shell
+ * @cmd: parsed command
+ * @status: status of the last execution
+ * Return: 0 for success, -1 for failure
  */
-int history_dis(__attribute__((unused))char **c, __attribute__((unused))int s)
+int history_display(__attribute__((unused)) char **cmd, __attribute__((unused)) int status)
 {
 	char *filename = ".simple_shell_history";
-	FILE *fp;
+	FILE *file_ptr;
 	char *line = NULL;
-	size_t length = 0;
-	int ctr = 0;
-	char *er;
+	size_t line_length = 0;
+	int counter = 0;
+	char *error_message;
 
-	fp = fopen(filename, "r");
-	if (fp == NULL)
+	file_ptr = fopen(filename, "r");
+	if (file_ptr == NULL)
 	{
 		return (-1);
 	}
-	while ((getline(&line, &length, fp)) != -1)
+
+	while ((getline(&line, &line_length, file_ptr)) != -1)
 	{
-		ctr++;
-		er = _itoa(ctr);
-		PRINTER(er);
-		free(er);
+		counter++;
+		error_message = _itoa(counter);
+		PRINTER(error_message);
+		free(error_message);
 		PRINTER(" ");
 		PRINTER(line);
-
 	}
-	if (line)
+
+	if (line != NULL)
 		free(line);
-	fclose(fp);
+
+	fclose(file_ptr);
 	return (0);
 }
 
 /**
- * print_echo - execute echo
+ * execute_echo - execute the echo command
  * @cmd: parsed command
- * Return: 0 Succes -1 Fail
+ * Return: 0 for success, -1 for failure
  */
-
-int print_echo(char **cmd)
+int execute_echo(char **cmd)
 {
 	pid_t pid;
-	int stat;
+	int status;
 
 	pid = fork();
 	if (pid == 0)
 	{
-	if (execve("/bin/echo", cmd, environ) == -1)
-	{
-		return (-1);
-	}
+		if (execve("/bin/echo", cmd, environ) == -1)
+		{
+			return (-1);
+		}
 		exit(EXIT_FAILURE);
 	}
 	else if (pid < 0)
@@ -62,9 +63,12 @@ int print_echo(char **cmd)
 	}
 	else
 	{
-		do {
-			waitpid(pid, &stat, WUNTRACED);
-		} while (!WIFEXITED(stat) && !WIFSIGNALED(stat));
+		do
+		{
+			waitpid(pid, &status, WUNTRACED);
+		} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
+
 	return (1);
 }
+

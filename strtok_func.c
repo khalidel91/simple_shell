@@ -1,67 +1,66 @@
 #include "shell.h"
 
 /**
- * check_delim - checks if a character match any char *
+ * check_delimiter - checks if a character matches any delimiter
  * @c: character to check
- * @str: string to check
- * Return: 1 Success, 0 Failed
+ * @delim: string of delimiters
+ * Return: 1 if success, 0 if failed
  */
-
-unsigned int check_delim(char c, const char *str)
+unsigned int check_delimiter(char c, const char *delim)
 {
-	unsigned int x;
+	unsigned int i;
 
-	for (x = 0; str[x] != '\0'; x++)
+	for (i = 0; delim[i] != '\0'; i++)
 	{
-		if (c == str[x])
-			return (1);
+		if (c == delim[i])
+			return 1;
 	}
-	return (0);
+	return 0;
 }
 
 /**
- * _strtok - token a string into token (strtrok)
- * @str: string
- * @delim: delimiter
+ * _strtok - tokenizes a string into tokens (strtok)
+ * @str: string to tokenize
+ * @delim: delimiter string
  * Return: pointer to the next token or NULL
  */
-
 char *_strtok(char *str, const char *delim)
 {
 	static char *ts;
 	static char *nt;
-	unsigned int x;
+	unsigned int i;
 
 	if (str != NULL)
 		nt = str;
 	ts = nt;
 	if (ts == NULL)
-		return (NULL);
-	for (x = 0; ts[x] != '\0'; x++)
+		return NULL;
+	for (i = 0; ts[i] != '\0'; i++)
 	{
-		if (check_delim(ts[x], delim) == 0)
+		if (check_delimiter(ts[i], delim) == 0)
 			break;
 	}
-	if (nt[x] == '\0' || nt[x] == '#')
+	if (nt[i] == '\0' || nt[i] == '#')
 	{
 		nt = NULL;
-		return (NULL);
+		return NULL;
 	}
-	ts = nt + x;
+	ts = nt + i;
 	nt = ts;
-	for (x = 0; nt[x] != '\0'; x++)
+	for (i = 0; nt[i] != '\0'; i++)
 	{
-		if (check_delim(nt[x], delim) == 1)
+		if (check_delimiter(nt[i], delim) == 1)
 			break;
 	}
-	if (nt[x] == '\0')
+	if (nt[i] == '\0')
 		nt = NULL;
 	else
 	{
-		nt[x] = '\0';
-		nt = nt + x + 1;
+		nt[i] = '\0';
+		nt = nt + i + 1;
 		if (*nt == '\0')
 			nt = NULL;
 	}
-	return (ts);
+	return ts;
 }
+
